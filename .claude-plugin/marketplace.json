@@ -1,0 +1,19 @@
+{
+  "name": "nen",
+  "description": "Nen-themed agent skill packs: six disciplines, one per aura category.",
+  "version": "0.1.0",
+  "owner": { "name": "rlaope", "url": "https://github.com/rlaope" },
+  "plugins": [
+    {
+      "name": "nen",
+      "source": "./",
+      "version": "0.1.0",
+      "description": "Six Nen-category agent skills: performance, refactoring, launch, reverse engineering, reliability, orchestration.",
+      "author": { "name": "rlaope", "url": "https://github.com/rlaope" },
+      "homepage": "https://github.com/rlaope/nen",
+      "license": "MIT",
+      "category": "skills",
+      "keywords": ["agent-skills", "performance", "refactoring", "reliability", "orchestration"]
+    }
+  ]
+}

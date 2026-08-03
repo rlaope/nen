@@ -1,0 +1,10 @@
+{
+  "name": "nen",
+  "version": "0.1.0",
+  "description": "Six installable agent skills mapped to the Nen categories: performance, refactoring, launch, reverse engineering, reliability, and orchestration.",
+  "author": { "name": "rlaope", "url": "https://github.com/rlaope" },
+  "homepage": "https://github.com/rlaope/nen",
+  "repository": "https://github.com/rlaope/nen",
+  "license": "MIT",
+  "keywords": ["agent-skills", "skills", "performance", "refactoring", "reliability", "orchestration"]
+}
