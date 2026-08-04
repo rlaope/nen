@@ -8,7 +8,7 @@ Skill packs that give an AI coding agent a discipline — six abilities, one per
 
 In *Hunter x Hunter*, every fighter's aura falls into one of six Nen categories, and mastery means knowing which category a problem belongs to. **nen** maps those six categories to six engineering disciplines and ships each one as an installable agent skill: a stance, a method, hard boundaries, and a worked trace that shows the discipline actually being applied.
 
-v0.1 ships **skills only** — no runtime, no hooks, no MCP servers. Each skill is a single portable `SKILL.md` that any [Agent Skills](https://agentskills.io)-compatible agent can read. Claude Code gets first-class packaging on top; everything else just reads the files.
+v0.1 ships **skills only** — no runtime, no hooks, no MCP servers. Each skill is a single portable `SKILL.md`, and the installer wires the same six files into whatever agent you run: Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi CLI, Antigravity, Pi, GitHub Copilot, or anything that reads an `AGENTS.md`-style instructions file. One skill text, every runtime.
 
 ## The six categories
 
@@ -25,20 +25,56 @@ The skills know about each other. Each one's **Boundaries** section names the si
 
 ## Install
 
-**Claude Code — plugin (recommended).** Managed updates, namespaced `/nen:*` commands:
+### One-line install
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh
+```
+
+Auto-detects the agents on your machine and installs for each one found. Or name your agent:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh -s -- --agent cursor
+```
+
+Targets: `claude`, `codex`, `cursor`, `opencode`, `gemini`, `qwen`, `kimi`, `antigravity`, `pi`, `copilot`, `agents-md`. Skill bodies land in `~/.nen/skills/`; each agent gets only a small routing block (name + trigger description + "read the SKILL.md first"), so the always-on context cost stays low and full bodies load on demand. Re-running the installer updates in place.
+
+### Ask your agent
+
+Paste this into whatever coding agent you use and let it install nen for its own environment:
+
+```text
+Install the nen skill pack from https://github.com/rlaope/nen into this environment.
+
+1. Fetch the repo: git clone --depth 1 https://github.com/rlaope/nen.git /tmp/nen
+   (or download and extract https://codeload.github.com/rlaope/nen/tar.gz/refs/heads/main).
+2. Copy the six skill files to ~/.nen/skills/<name>/SKILL.md
+   (enhancer, transmuter, emitter, specialist, conjurer, manipulator).
+3. Wire them into YOUR runtime, whichever you are:
+   - Claude Code: copy the whole repo to ~/.claude/skills/nen instead — it loads
+     as a namespaced plugin (/nen:<skill>).
+   - Cursor: for each skill create .cursor/rules/nen-<name>.mdc — frontmatter
+     description = the skill's description, alwaysApply: false, body = the
+     SKILL.md body without its frontmatter.
+   - Any agent with an instructions file (AGENTS.md, GEMINI.md, QWEN.md,
+     copilot-instructions.md, ...): append a "nen skills" section listing each
+     skill's name, its ~/.nen/skills path, and its description, plus this rule:
+     "when a task matches a description, read that SKILL.md first and follow
+     its Method before acting."
+4. Do not edit the SKILL.md files themselves.
+5. Verify: list the six skills you installed and where each one landed.
+```
+
+### More ways
+
+**Claude Code plugin** — managed updates, namespaced `/nen:*` commands:
 
 ```
 /plugin marketplace add rlaope/nen
 /plugin install nen@nen
 ```
 
-**Claude Code — manual.** Clone into your skills directory; loads as `nen@skills-dir`, still namespaced:
-
-```sh
-git clone https://github.com/rlaope/nen.git ~/.claude/skills/nen
-```
-
-**Any other agent supporting Agent Skills.** Point it at `skills/<name>/SKILL.md`. The `.claude-plugin/` manifests are additive Claude Code packaging that other agents simply ignore — the skills themselves are plain frontmatter-plus-markdown.
+**Raw files.** The skills are plain frontmatter-plus-markdown in `skills/<name>/SKILL.md` — point any [Agent Skills](https://agentskills.io)-compatible runtime at them directly. The `.claude-plugin/` manifests and `install.sh` are additive packaging that other consumers simply ignore.
 
 ## Usage
 
@@ -47,6 +83,8 @@ Skills auto-activate when your request matches a skill's description, or invoke 
 ```
 /nen:conjurer harden the webhook consumer before launch
 ```
+
+On runtimes without slash commands (Codex, OpenCode, Gemini CLI, Qwen Code, and the rest of the `AGENTS.md` family), the installed routing block auto-matches requests against the descriptions — or just say "use the nen conjurer skill".
 
 A design stance, stated honestly: the descriptions are written deliberately assertive, because skills under-trigger by default — a timid description means the discipline never fires when it should. The cost of the aggressive side is bounded: if a skill fires on the wrong problem, its Boundaries section recognizes that and hands off to the right sibling instead of plowing ahead.
 
@@ -67,6 +105,7 @@ nen/
 │   └── marketplace.json     # marketplace listing (source: ./)
 ├── assets/
 │   └── nen-hexagon.png
+├── install.sh               # universal installer (claude/codex/cursor/opencode/...)
 ├── scripts/
 │   └── lint-skills.py       # structural lint; --release runs the full gate
 └── skills/
