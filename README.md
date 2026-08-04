@@ -31,13 +31,7 @@ The skills know about each other. Each one's **Boundaries** section names the si
 curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh
 ```
 
-Auto-detects the agents on your machine and installs for each one found. Or name your agent:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh -s -- --agent cursor
-```
-
-Targets: `claude`, `codex`, `cursor`, `opencode`, `gemini`, `qwen`, `kimi`, `antigravity`, `pi`, `copilot`, `agents-md`. Skill bodies land in `~/.nen/skills/`; each agent gets only a small routing block (name + trigger description + "read the SKILL.md first"), so the always-on context cost stays low and full bodies load on demand. Re-running the installer updates in place.
+Adaptive by design: the script detects every agent on your machine — Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, Qwen Code, and anything in the `AGENTS.md` family — and wires the skills into each one it finds. Skill bodies land in `~/.nen/skills/`; each agent gets only a small routing block (name + trigger description + "read the SKILL.md first"), so full bodies load on demand. Re-running the installer updates in place.
 
 ### Ask your agent
 
@@ -87,30 +81,6 @@ Skills auto-activate when your request matches a skill's description, or invoke 
 On runtimes without slash commands (Codex, OpenCode, Gemini CLI, Qwen Code, and the rest of the `AGENTS.md` family), the installed routing block auto-matches requests against the descriptions — or just say "use the nen conjurer skill".
 
 A design stance, stated honestly: the descriptions are written deliberately assertive, because skills under-trigger by default — a timid description means the discipline never fires when it should. The cost of the aggressive side is bounded: if a skill fires on the wrong problem, its Boundaries section recognizes that and hands off to the right sibling instead of plowing ahead.
-
-## Context cost
-
-Installing all six skills adds **~1,075 tokens** of always-on context to every session — the frontmatter descriptions the agent scans for trigger matching. A skill's full body (~2.5k–3.5k tokens) is loaded only when that skill fires. Measured on the plugin-dir install path:
-
-```sh
-cd nen && claude --plugin-dir . plugin details nen
-```
-
-## Repository layout
-
-```
-nen/
-├── .claude-plugin/
-│   ├── plugin.json          # Claude Code plugin manifest
-│   └── marketplace.json     # marketplace listing (source: ./)
-├── assets/
-│   └── nen-hexagon.png
-├── install.sh               # universal installer (claude/codex/cursor/opencode/...)
-├── scripts/
-│   └── lint-skills.py       # structural lint; --release runs the full gate
-└── skills/
-    └── <name>/SKILL.md      # one file per skill, six skills
-```
 
 ## Contributing
 
