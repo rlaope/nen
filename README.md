@@ -21,7 +21,7 @@ Skill packs that give an AI coding agent a discipline.
 
 In *Hunter x Hunter*, every fighter's aura falls into one of six Nen categories, and mastery means knowing which category a problem belongs to. **nen** maps each category to an engineering discipline and ships each one as an installable agent skill: a stance, a method, hard boundaries, and a worked trace that shows the discipline actually being applied.
 
-nen ships **skills only** — no runtime, no hooks, no MCP servers. Each skill is a single portable `SKILL.md` that any agent can read: Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi CLI, Antigravity, Pi, GitHub Copilot, or anything with an `AGENTS.md`-style instructions file. One skill text, every runtime.
+nen ships **skills only** — no runtime, no hooks, no MCP servers; the installer writes nothing but plain-text instruction blocks, at most one small always-on routing block per runtime. Each skill is a single portable `SKILL.md` that any agent can read: Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi CLI, Antigravity, Pi, GitHub Copilot, or anything with an `AGENTS.md`-style instructions file. One skill text, every runtime.
 
 <br>
 
@@ -48,9 +48,10 @@ The skills know about each other. Each one's **Boundaries** section names the si
 
 Turning it on:
 
-- **Claude Code** — invoke `/nen:en` once; it runs as the session baseline from then on.
+- **install.sh path (any runtime)** — nothing to do: the installer switches the baseline on (see [Install — one command](#install--one-command)).
+- **Claude Code via the plugin** — skills auto-fire on matching requests out of the box; for the standing baseline invoke `/nen:en` once per session, or run the installer to make it permanent.
 - **AGENTS.md-family runtimes** (Codex, OpenCode, Gemini CLI, Qwen Code, Kimi, Antigravity, ...) — the installed routing block *is* the En protocol; it is on by default after install.
-- **Cursor** — the `nen-en` rule engages when a request spans disciplines, or pin it with "run everything through nen".
+- **Cursor** — the always-on `nen-en-baseline` rule routes every request; without it, the `nen-en` rule still engages when a request spans disciplines.
 
 Turning it off: say `nen off` (resume with `nen on`) — the protocol requires the agent to acknowledge both transitions.
 
@@ -59,6 +60,24 @@ Turning it off: say `nen off` (resume with `nen on`) — the protocol requires t
 制約と誓約 — Restriction and Pledge: an ability grows stronger through what its user swears not to do, and a broken oath forfeits the power itself. That law ships as a skill, [vow](skills/vow/) (`/nen:vow`) — pre-commitment engineering. Before the work starts, the agent declares falsifiable vows right under the En engagement line: discipline pledges distilled from the engaged skills' own **Done means** ("no fix claimed without the failing case red then green") and scope pledges bounding the blast radius ("diff stays inside `src/billing/`", "no new dependencies"). Every vow is audited before any done claim, with evidence a third party can check; a vow broken without open renegotiation voids the claim.
 
 For an agent the law is literal, not thematic: constraints declared before the first action bind every action after it — the same constraints recalled at review time only grade the damage.
+
+<br>
+
+## Install — one command
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh
+```
+
+That is the whole setup. The installer detects the runtimes it can wire — Claude Code, Codex, OpenCode, Gemini CLI, and Qwen Code anywhere on the machine, plus Cursor and any existing `AGENTS.md` when run inside a project — and wires nen into each one it finds: skill bodies land in `~/.nen`, a marker-scoped routing block goes on top, and the En baseline is switched on. From the next request onward the agent reads each task's problem shape and engages the right abilities on its own. There is nothing to learn and no command to remember — the only phrase worth knowing is `nen off` (and `nen on` to resume). Runtimes the auto-detect cannot see (Kimi, Antigravity, Pi, Copilot) get the same block explicitly: `curl -fsSL https://raw.githubusercontent.com/rlaope/nen/main/install.sh | sh -s -- --agent <name>`.
+
+Per runtime, "on" means:
+
+- **Claude Code** — the routing block (En protocol plus the skill table pointing into `~/.nen`) is appended to `~/.claude/CLAUDE.md`, which loads in every session: the standing baseline. `/nen:<skill>` slash commands come from the plugin path below — the two compose. Pass `--no-baseline` to skip the block.
+- **AGENTS.md family** (Codex, OpenCode, Gemini CLI, Qwen Code, Kimi, Antigravity, ...) — the installed routing block *is* the En protocol.
+- **Cursor** — one always-on baseline rule (`nen-en-baseline.mdc`, kept deliberately tiny) routes every request; the per-skill rules load on demand.
+
+Everything the installer writes sits between `<!-- nen:begin/end -->` markers (replacements leave a `.nen-bak` backup beside the file), under a `nen-` file prefix, or inside `~/.nen` — and re-running it replaces rather than duplicates, so uninstalling is deleting exactly those.
 
 <br>
 
@@ -76,11 +95,15 @@ Teach yourself the nen skill pack from https://github.com/rlaope/nen.
 2. Copy every skill directory from the repo's skills/ folder to
    ~/.nen/skills/<name>/SKILL.md.
 3. Wire them into YOUR runtime, whichever you are:
-   - Claude Code: copy the whole repo to ~/.claude/skills/nen instead — it loads
-     as a namespaced plugin (/nen:<skill>).
+   - Claude Code: its instructions file is ~/.claude/CLAUDE.md — append the
+     same marker-scoped "nen skills" section as the AGENTS.md family, listing
+     each skill's ~/.nen path. (/nen:<skill> slash commands come from the
+     plugin instead: /plugin marketplace add rlaope/nen.)
    - Cursor: for each skill create .cursor/rules/nen-<name>.mdc — frontmatter
      description = the skill's description, alwaysApply: false, body = the
-     SKILL.md body without its frontmatter.
+     SKILL.md body without its frontmatter. Copy the repo's
+     .cursor/rules/nen-en-baseline.mdc as-is (alwaysApply: true) so En routes
+     every request.
    - Any agent with an instructions file (AGENTS.md, GEMINI.md, QWEN.md,
      copilot-instructions.md, ...): append a "nen skills" section listing each
      skill's name, its ~/.nen/skills path, and its description, plus this rule:
