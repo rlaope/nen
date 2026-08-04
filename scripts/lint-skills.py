@@ -55,7 +55,7 @@ FILES = [
     "scripts/lint-skills.py",
 ] + [f"skills/{s}/SKILL.md" for s in SKILLS] + [
     f".cursor/rules/nen-{s}.mdc" for s in SKILLS
-]
+] + [".cursor/rules/nen-en-baseline.mdc"]
 
 TRIGGER = re.compile(r"use (?:this skill )?when\b", re.I)
 # Escaped range on purpose: a literal Hangul character class would make this
@@ -137,7 +137,7 @@ if readme.exists():
         re.findall(r"\]\(skills/([a-z-]+)/(?:SKILL\.md)?\)", readme.read_text(encoding="utf-8"))
     )
     if linked != set(SKILLS):
-        fail(f"README drift: skill links resolve to {sorted(linked)}, expected all six skills")
+        fail(f"README drift: skill links resolve to {sorted(linked)}, expected every skill")
 else:
     skipped.append("readme-drift")
 

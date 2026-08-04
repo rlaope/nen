@@ -9,11 +9,22 @@
 # thin layer on top, so every runtime reads the same skill text.
 set -eu
 
-REPO_TARBALL="https://codeload.github.com/rlaope/nen/tar.gz/refs/heads/main"
+NEN_REF="${NEN_REF:-main}"
+case "$NEN_REF" in
+  *[!A-Za-z0-9._/-]*|"") echo "nen: NEN_REF must be a plain branch or tag name" >&2; exit 1 ;;
+esac
+REPO_TARBALL="https://codeload.github.com/rlaope/nen/tar.gz/$NEN_REF"
 NEN_HOME="${NEN_HOME:-$HOME/.nen}"
+case "$NEN_HOME" in
+  *'$'*|*'`'*) echo "nen: NEN_HOME must not contain \$ or backquotes" >&2; exit 1 ;;
+esac
+# pre-fetch default only — fetch_repo re-derives this from the fetched tree,
+# so the list can never skew against the ref actually installed
 SKILLS="enhancer transmuter emitter specialist conjurer manipulator hatsu en vow"
 AGENT="auto"
 DEST=""
+BASELINE=1
+WIRED=""
 
 usage() {
   cat <<'EOF'
@@ -22,11 +33,20 @@ nen installer
   --agent <name>   claude | cursor | codex | opencode | gemini | qwen |
                    kimi | antigravity | pi | copilot | agents-md | auto (default)
   --dest <path>    override the instructions-file path (agents-md family only)
+  --no-baseline    claude target: skip the ~/.claude/CLAUDE.md baseline write
   --help           this text
 
+Environment:
+  NEN_HOME     where skill bodies land (default ~/.nen)
+  NEN_REF      branch or tag name to install (default main — pin a tag for
+               repeatability; the git fallback path cannot take a commit SHA)
+
 Targets:
-  claude       copy the repo to ~/.claude/skills/nen (loads namespaced as nen@skills-dir)
-  cursor       generate .cursor/rules/nen-<skill>.mdc in the current project
+  claude       En routing block in ~/.claude/CLAUDE.md (standing baseline;
+               skill bodies load from ~/.nen — for /nen:<skill> slash commands
+               add the plugin: /plugin marketplace add rlaope/nen)
+  cursor       generate .cursor/rules/nen-<skill>.mdc in the current project,
+               plus the always-on nen-en-baseline rule
   copilot      append the routing block to .github/copilot-instructions.md
   codex        routing block in ~/.codex/AGENTS.md
   opencode     routing block in ~/.config/opencode/AGENTS.md
@@ -46,6 +66,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --agent) AGENT="$2"; shift 2 ;;
     --dest) DEST="$2"; shift 2 ;;
+    --no-baseline) BASELINE=0; shift ;;
     --help|-h) usage; exit 0 ;;
     *) echo "unknown option: $1" >&2; usage; exit 1 ;;
   esac
@@ -56,16 +77,33 @@ say() { printf '%s\n' "$*"; }
 fetch_repo() {
   WORK="$(mktemp -d)"
   trap 'rm -rf "$WORK"' EXIT
-  say "Fetching nen..."
+  say "Fetching nen ($NEN_REF)..."
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$REPO_TARBALL" | tar -xz -C "$WORK"
   elif command -v git >/dev/null 2>&1; then
-    git clone --depth 1 --quiet https://github.com/rlaope/nen.git "$WORK/nen-main"
+    git clone --depth 1 --branch "$NEN_REF" --quiet https://github.com/rlaope/nen.git "$WORK/nen-src"
   else
     echo "need curl or git" >&2; exit 1
   fi
-  SRC="$WORK/nen-main"
-  [ -d "$SRC/skills" ] || { echo "download looks wrong: no skills/ in $SRC" >&2; exit 1; }
+  SRC="$(find "$WORK" -mindepth 1 -maxdepth 1 -type d -name 'nen-*' | head -n 1)"
+  [ -n "$SRC" ] && [ -d "$SRC/skills" ] || { echo "download looks wrong: no skills/ in $WORK" >&2; exit 1; }
+  # derive the skill set from the fetched tree (names sanity-filtered), but
+  # keep the curated default order; anything new upstream appends at the end
+  found_skills=""
+  for d in "$SRC/skills"/*/; do
+    s="$(basename "$d")"
+    case "$s" in *[!a-z0-9-]*) continue ;; esac
+    [ -f "${d}SKILL.md" ] && found_skills="$found_skills $s"
+  done
+  ordered=""
+  for s in $SKILLS; do
+    case " $found_skills " in *" $s "*) ordered="$ordered $s" ;; esac
+  done
+  for s in $found_skills; do
+    case " $ordered " in *" $s "*) ;; *) ordered="$ordered $s" ;; esac
+  done
+  SKILLS="${ordered# }"
+  [ -n "$SKILLS" ] || { echo "download looks wrong: no skills in $SRC/skills" >&2; exit 1; }
 }
 
 install_home() {
@@ -118,51 +156,137 @@ EOF
 }
 
 append_block() {
-  # idempotent: replace any existing nen block in $1, else append
+  # idempotent: replace any existing nen block in $1 with the output of the
+  # block generator named in $2, else append. Refuses a file whose markers are
+  # unbalanced or duplicated, keeps a .nen-bak backup, and stages the rewrite
+  # beside the target so the final rename cannot leave a half-written file.
   file="$1"
+  block="$2"
+  case "$block" in
+    routing_block|claude_block) ;;
+    *) echo "nen: unknown block generator: $block" >&2; exit 1 ;;
+  esac
   mkdir -p "$(dirname "$file")"
   touch "$file"
-  tmp="$(mktemp)"
-  awk '/<!-- nen:begin/{skip=1} !skip{print} /<!-- nen:end/{skip=0}' "$file" >"$tmp"
-  { cat "$tmp"; [ -s "$tmp" ] && echo ""; routing_block; } >"$file"
-  rm -f "$tmp"
-  say "Routing block written to $file"
+  # write through symlinks (dotfiles setups): resolve to the real target so
+  # the rename below cannot replace the link with a regular file
+  n=0
+  while [ -L "$file" ] && [ "$n" -lt 8 ]; do
+    link="$(readlink "$file")"
+    case "$link" in /*) file="$link" ;; *) file="$(dirname "$file")/$link" ;; esac
+    n=$((n+1))
+  done
+  begins="$(grep -c '^<!-- nen:begin' "$file" || true)"
+  ends="$(grep -c '^<!-- nen:end' "$file" || true)"
+  if [ "${begins:-0}" != "${ends:-0}" ] || [ "${begins:-0}" -gt 1 ]; then
+    say "nen: $file has unbalanced or duplicated nen markers — leaving it untouched."
+    say "     Remove the stale nen block by hand, then re-run."
+    WROTE=0
+    return 0
+  fi
+  bak=""
+  if [ "${begins:-0}" -eq 1 ]; then
+    # replacing an existing block: keep the pre-write state beside the file.
+    # A first install is append-only, so the original text survives in place.
+    cp -p "$file" "$file.nen-bak"
+    bak=" (backup: $file.nen-bak)"
+  fi
+  stripped="$file.nen-tmp.$$"
+  staged="$file.nen-new.$$"
+  awk '/^<!-- nen:begin/{skip=1} !skip{print} /^<!-- nen:end/{skip=0}' "$file" >"$stripped"
+  cp -p "$file" "$staged"
+  { cat "$stripped"; [ -s "$stripped" ] && echo ""; "$block"; } >"$staged"
+  rm -f "$stripped"
+  mv -f "$staged" "$file"
+  say "nen block written to $file$bak"
+}
+
+claude_block() {
+  # ~/.claude/CLAUDE.md is resident in every session of every project, so this
+  # block carries the protocol and a path pattern — never the nine trigger
+  # descriptions (routing_block's table would be ~8 KB of standing context).
+  cat <<EOF
+<!-- nen:begin (generated by install.sh — do not edit inside the markers) -->
+## nen skills — the En protocol
+
+The nen abilities from https://github.com/rlaope/nen: one per Nen category,
+hatsu (forging new skills) at the center, en — this protocol itself — and vow,
+the pre-commitments that bind each engagement.
+
+Run En on every incoming task:
+1. Classify the WORK, not the words. Ask what must be true afterward — a number
+   moved (enhancer), a behavior-preserving change of shape (transmuter), words
+   that land with an audience (emitter), a mechanism named (specialist),
+   survival under failure (conjurer), verified distributed work (manipulator),
+   an ability that doesn't exist yet (hatsu). Never route on keyword overlap.
+2. Engage every skill the work genuinely spans — stacking two or three in
+   dependency order is normal. Read each engaged skill's body FIRST —
+   $NEN_HOME/skills/<name>/SKILL.md — then act.
+3. Announce the engagement in one line, e.g. "En: specialist -> conjurer".
+4. Right under the announcement, declare the engagement's vows — up to three
+   falsifiable pledges distilled from the engaged skills' Done means plus up to
+   three scope pledges — and audit every vow before claiming done.
+5. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
+6. If a skill fires on the wrong problem, its Boundaries section names the
+   sibling to hand off to — follow the hand-off.
+<!-- nen:end -->
+EOF
 }
 
 install_claude() {
-  dest="$HOME/.claude/skills/nen"
-  mkdir -p "$dest"
-  cp -R "$SRC/skills" "$dest/"
-  cp -R "$SRC/.claude-plugin" "$dest/" 2>/dev/null || true
-  say "Claude Code: installed to $dest (invoke as /nen:<skill>)"
-  say "  (or use the plugin: /plugin marketplace add rlaope/nen)"
+  # Claude Code loads ~/.claude/CLAUDE.md in every session, which makes it the
+  # instructions file of the AGENTS.md family for our purposes — same block,
+  # same markers. Skill bodies load on demand from ~/.nen via the block's
+  # path table; /nen:<skill> slash commands come from the plugin instead.
+  if [ "$BASELINE" = 1 ]; then
+    append_block "$HOME/.claude/CLAUDE.md" claude_block
+    say "Claude Code: En baseline is on in every session"
+  else
+    say "Claude Code: baseline skipped (--no-baseline) — invoke /nen:en per session"
+    WROTE=0
+  fi
+  say "  (for /nen:<skill> slash commands add the plugin: /plugin marketplace add rlaope/nen)"
 }
 
 install_cursor() {
+  if [ -f "scripts/gen-adapters.py" ] && [ -f "skills/en/SKILL.md" ]; then
+    say "Cursor: this is a nen checkout — rules are generated in-repo (scripts/gen-adapters.py); skipping"
+    WROTE=0
+    return 0
+  fi
   mkdir -p .cursor/rules
   for s in $SKILLS; do
     body_file="$NEN_HOME/skills/$s/SKILL.md"
     desc="$(skill_description "$s")"
     {
       printf -- '---\ndescription: "%s"\nalwaysApply: false\n---\n\n' "$(printf '%s' "$desc" | sed 's/"/\\"/g')"
-      awk 'NR==1 && /^---$/ {infm=1; next} infm && /^---$/ {infm=0; next} !infm {print}' "$body_file"
+      # squeeze the blank line after the frontmatter so this output is
+      # byte-identical to what scripts/gen-adapters.py generates
+      awk 'NR==1 && /^---$/ {infm=1; next} infm && /^---$/ {infm=0; next} infm {next} !body && /^$/ {next} {body=1; print}' "$body_file"
     } >".cursor/rules/nen-$s.mdc"
   done
-  say "Cursor: wrote .cursor/rules/nen-<skill>.mdc (one rule per skill, agent-requested by description)"
+  if [ -f "$SRC/.cursor/rules/nen-en-baseline.mdc" ]; then
+    cp "$SRC/.cursor/rules/nen-en-baseline.mdc" ".cursor/rules/nen-en-baseline.mdc"
+    say "Cursor: wrote .cursor/rules/nen-<skill>.mdc + the always-on nen-en-baseline rule (En on for every request)"
+  else
+    say "Cursor: wrote .cursor/rules/nen-<skill>.mdc (baseline rule absent from this revision — rules engage by description)"
+  fi
 }
 
 do_target() {
+  WROTE=1
   case "$1" in
     claude) install_claude ;;
     cursor) install_cursor ;;
-    copilot) append_block "${DEST:-.github/copilot-instructions.md}" ;;
-    codex) append_block "${DEST:-$HOME/.codex/AGENTS.md}" ;;
-    opencode) append_block "${DEST:-$HOME/.config/opencode/AGENTS.md}" ;;
-    gemini) append_block "${DEST:-$HOME/.gemini/GEMINI.md}" ;;
-    qwen) append_block "${DEST:-$HOME/.qwen/QWEN.md}" ;;
-    kimi|antigravity|pi|agents-md) append_block "${DEST:-./AGENTS.md}" ;;
+    copilot) append_block "${DEST:-.github/copilot-instructions.md}" routing_block ;;
+    codex) append_block "${DEST:-$HOME/.codex/AGENTS.md}" routing_block ;;
+    opencode) append_block "${DEST:-$HOME/.config/opencode/AGENTS.md}" routing_block ;;
+    gemini) append_block "${DEST:-$HOME/.gemini/GEMINI.md}" routing_block ;;
+    qwen) append_block "${DEST:-$HOME/.qwen/QWEN.md}" routing_block ;;
+    kimi|antigravity|pi|agents-md) append_block "${DEST:-./AGENTS.md}" routing_block ;;
     *) echo "unknown agent: $1" >&2; usage; exit 1 ;;
   esac
+  if [ "$WROTE" = 1 ]; then WIRED="$WIRED $1"; fi
 }
 
 fetch_repo
@@ -175,7 +299,10 @@ if [ "$AGENT" = "auto" ]; then
   [ -d "$HOME/.config/opencode" ] && { do_target opencode; found=1; }
   [ -d "$HOME/.gemini" ] && { do_target gemini; found=1; }
   [ -d "$HOME/.qwen" ] && { do_target qwen; found=1; }
-  [ -d ".cursor" ] && { do_target cursor; found=1; }
+  [ -d ".cursor" ] && [ "$PWD" != "$HOME" ] && { do_target cursor; found=1; }
+  if [ -f "AGENTS.md" ] && ! head -n 1 AGENTS.md | grep -q 'generated by scripts/gen-adapters.py'; then
+    do_target agents-md; found=1
+  fi
   if [ -z "$found" ]; then
     say "No known agent detected — writing the generic block to ./AGENTS.md"
     do_target agents-md
@@ -186,5 +313,13 @@ fi
 
 say ""
 say "nen installed. Skills: $SKILLS"
-say "Uninstall: remove $NEN_HOME, the block between <!-- nen:begin/end --> markers,"
-say "           ~/.claude/skills/nen, and .cursor/rules/nen-*.mdc as applicable."
+if [ -n "$WIRED" ]; then
+  say "Wired:$WIRED — En is on there by default; just ask normally."
+  say "Say 'nen off' to suspend, 'nen on' to resume."
+else
+  say "Nothing was wired — every write was refused or skipped; see the messages above."
+fi
+say "Uninstall: remove $NEN_HOME, the blocks between <!-- nen:begin/end --> markers"
+say "           (and any .nen-bak backups beside them), and .cursor/rules/nen-*.mdc"
+say "           as applicable. A previous nen version may also have written"
+say "           ~/.claude/skills/nen — remove that too if present."

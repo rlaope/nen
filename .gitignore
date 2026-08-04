@@ -1,4 +1,6 @@
 .omc/
+.playwright-mcp/
+*.nen-bak
 .DS_Store
 evals/results/
 node_modules/

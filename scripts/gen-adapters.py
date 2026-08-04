@@ -67,10 +67,28 @@ def mdc(s):
     return f'---\ndescription: "{escaped}"\nalwaysApply: false\n---\n\n{body}'
 
 
+# Always-on Cursor rule: the standing En baseline. Deliberately tiny — it is
+# loaded on every request, so it carries the protocol, not the skill bodies.
+BASELINE_MDC = '''---
+description: "nen En baseline — standing auto-routing for every request"
+alwaysApply: true
+---
+
+Run the En protocol on every incoming request: classify the WORK's problem
+shape — what must be true afterward — engage the nen abilities it genuinely
+spans in dependency order, announce the engagement in one line, declare the
+engagement's vows, and audit them before claiming done. The full protocol and
+the ability bodies live in the other nen-* rules — read each engaged skill's
+rule before acting. "nen off" suspends this baseline; "nen on" resumes it.
+Acknowledge both transitions.
+'''
+
+
 def targets():
     out = {ROOT / "AGENTS.md": agents_md()}
     for s in SKILLS:
         out[ROOT / ".cursor" / "rules" / f"nen-{s}.mdc"] = mdc(s)
+    out[ROOT / ".cursor" / "rules" / "nen-en-baseline.mdc"] = BASELINE_MDC
     return out
 
 
