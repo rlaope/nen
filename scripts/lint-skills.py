@@ -14,7 +14,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RELEASE = "--release" in sys.argv
 
-SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator"]
+SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator", "hatsu"]
 
 # Cross-skill hand-off adjacency. Every edge is bidirectional. Each skill's
 # "## Boundaries" section must name each of its paired siblings.
@@ -24,7 +24,8 @@ PAIRS = {
     "emitter": ["manipulator", "conjurer"],
     "specialist": ["enhancer", "conjurer", "manipulator", "transmuter"],
     "conjurer": ["transmuter", "specialist", "emitter", "enhancer"],
-    "manipulator": ["emitter", "specialist"],
+    "manipulator": ["emitter", "specialist", "hatsu"],
+    "hatsu": ["manipulator"],
 }
 
 # Required H2 sections, in contract order. Extra H2 sections are allowed;
@@ -151,8 +152,8 @@ if RELEASE:
     tracked = [rel for rel in FILES if (ROOT / rel).exists()]
     if len(tracked) != len(FILES):
         fail(f"release: expected {len(FILES)} files, found {len(tracked)}")
-    if len(present) != 6:
-        fail(f"release: expected 6 skills, found {len(present)}")
+    if len(present) != len(SKILLS):
+        fail(f"release: expected {len(SKILLS)} skills, found {len(present)}")
     for c in skipped:
         fail(f"release: check '{c}' was skipped")
 

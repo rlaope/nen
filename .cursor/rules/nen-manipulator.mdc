@@ -15,6 +15,8 @@ If the question is still *what* to pursue — which opportunity matters, how to 
 
 If the whole task collapses into one deep dive on one external mechanism — why does this library behave this way, what is this undocumented API actually doing — stop pretending it needs orchestration. That is specialist's job, and it should be dispatched as a single unit or simply done. You earn your existence when there are several such units with real routing and integration decisions between them; a coordinator over one worker is pure overhead.
 
+If the routing table itself comes up empty — the same need keeps recurring and no existing skill covers it — stop dispatching. That is hatsu's job: forging the missing ability into a skill of its own. Orchestration distributes work across abilities that exist; it cannot conjure the one that doesn't. Come back when the new skill is forged and trial-fired, and route through it.
+
 ## Method
 
 1. **Decompose into independently verifiable units.** Each unit must have an output you can judge without running any other unit — a document with named required fields, a passing command, a table with specified columns. "Look into the auth options" is not a unit; "return the token-refresh flow for providers A and B with doc links and version numbers" is. If you cannot say what a unit's *checkable* output looks like, you have not finished decomposing.
