@@ -1,5 +1,6 @@
 .omc/
 .DS_Store
+evals/results/
 node_modules/
 *.log
 .claude/settings.local.json
