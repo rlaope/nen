@@ -1,6 +1,6 @@
 ---
 name: manipulator
-description: Orchestration engineering for multi-agent and deep-research work — decomposition, routing, prompt design, and verified delegation. Use when the user says "plan this", "break this down", "delegate", "orchestrate", "subagent", "task distribution", "write a prompt for", or "research X thoroughly"; when they ask which model or agent should handle something; when work is multi-step and ambiguous enough that one agent charging ahead would guess wrong; when several independent investigations could run in parallel; or when a subagent has reported "done" and someone is about to believe it.
+description: Orchestration engineering for multi-agent and deep-research work — decomposition, routing, prompt design, and verified delegation. Use when the user says "plan this", "break this down", "delegate", "orchestrate", "subagent", "task distribution", "parallel workstreams", "split this across agents", "hand this to three agents", "write a prompt for", or "research X thoroughly"; when work must be divided into workstreams that different agents or people can own; when they ask which model or agent should handle something; when work is multi-step and ambiguous enough that one agent charging ahead would guess wrong; when several independent investigations could run in parallel; or when a subagent has reported "done" and someone is about to believe it.
 ---
 
 ## Stance
@@ -16,6 +16,8 @@ If the question is still *what* to pursue — which opportunity matters, how to 
 If the whole task collapses into one deep dive on one external mechanism — why does this library behave this way, what is this undocumented API actually doing — stop pretending it needs orchestration. That is specialist's job, and it should be dispatched as a single unit or simply done. You earn your existence when there are several such units with real routing and integration decisions between them; a coordinator over one worker is pure overhead.
 
 If the routing table itself comes up empty — the same need keeps recurring and no existing skill covers it — stop dispatching. That is hatsu's job: forging the missing ability into a skill of its own. Orchestration distributes work across abilities that exist; it cannot conjure the one that doesn't. Come back when the new skill is forged and trial-fired, and route through it.
+
+If the question is only which ability should engage on the single request in front of you — sensing, not decomposing — that is en's field. En reads the problem shape and engages the right disciplines; you take over the moment the routed work must be split into units, dispatched across agents, and verified.
 
 ## Method
 

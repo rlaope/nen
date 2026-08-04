@@ -1,5 +1,5 @@
 ---
-description: "Failure-mode-driven reliability engineering — enumerate how it breaks, give every mode a verdict, prove every handler with a reproducing test. Use when the user says \"flaky\", \"harden this before launch\", \"what if this fails\", \"error handling\", \"timeout\", \"retry\", \"idempotency\", or \"race condition\"; when an incident or postmortem lands; when a job crashes halfway and leaves partial state; when a webhook or queue consumer sees double delivery; when crash recovery is undefined; or when code is about to ship with only happy-path tests."
+description: "Failure-mode-driven reliability engineering — enumerate how it breaks, give every mode a verdict, prove every handler with a reproducing test. Use when the user says \"flaky\", \"harden this before launch\", \"what if this fails\", \"error handling\", \"timeout\", \"retry\", \"idempotency\", or \"race condition\"; when an incident or postmortem lands; when a job crashes halfway and leaves partial state; when a webhook or queue consumer double-fires, sees double delivery, or charges a customer twice; when crash recovery is undefined; or when code is about to ship with only happy-path tests."
 alwaysApply: false
 ---
 
