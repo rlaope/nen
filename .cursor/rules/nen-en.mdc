@@ -17,6 +17,8 @@ When the field senses a recurring need that no skill in the table covers, route 
 
 En never does the work itself. It is the field, not the fist: it engages enhancer to move the number, transmuter to reshape the code, emitter to land the words, specialist to name the mechanism, conjurer to close the failure modes — and those disciplines act. An en that starts optimizing has stopped sensing.
 
+The engagement line is a routing decision, not a promise about the work. Binding the work is vow's ability: when vow is installed, the announcement is followed immediately by the engagement's vow block — pre-commitments distilled from the engaged skills' Done means, audited before any done claim. En senses; vow binds; the field never swears the oath itself.
+
 ## Method
 
 1. **Restate the request as its problem shape in one line — what must be TRUE afterward.** Not what the request mentions; what the world must look like when the work is done. A number moved? A behavior-preserving change of shape? Words that land with a specific audience? An external mechanism named? Survival under failure proven? Distributed work verified? An ability that does not exist yet? That single line is the field's reading, and every later step leans on it.
@@ -29,7 +31,7 @@ En never does the work itself. It is the field, not the fist: it engages enhance
 
 5. **Read each selected SKILL.md in full before acting.** Engaging an ability you have not loaded is naming it, not using it — the work will carry the skill's name and none of its method.
 
-6. **Announce the engagement in one line.** "En: specialist → conjurer — name the double-fire mechanism, then close its failure modes." Skills, order, reason — one line, so the routing decision is auditable by anyone reading the transcript.
+6. **Announce the engagement in one line.** "En: specialist → conjurer — name the double-fire mechanism, then close its failure modes." Skills, order, reason — one line, so the routing decision is auditable by anyone reading the transcript. When the vow ability is installed, follow the announcement immediately with its vow block: the line says which disciplines act, the vows say what the acting work swears not to do.
 
 7. **Honor the switch.** When the user has made nen the session baseline, steps 1–6 run on every incoming request. "nen off" suspends the protocol immediately — plain assistance, no skill loading, no shape lines — until "nen on". Acknowledge each transition in one short line and nothing more.
 

@@ -1,6 +1,6 @@
 {
   "name": "nen",
-  "description": "Nen-themed agent skill packs: the six aura categories, hatsu at the center, and en for auto-routing.",
+  "description": "Nen-themed agent skill packs: the six aura categories, hatsu at the center, en for auto-routing, and vow for pre-commitments.",
   "version": "0.3.0",
   "owner": { "name": "rlaope", "url": "https://github.com/rlaope" },
   "plugins": [
@@ -8,7 +8,7 @@
       "name": "nen",
       "source": "./",
       "version": "0.3.0",
-      "description": "Nen agent skills: performance, refactoring, launch, reverse engineering, reliability, orchestration, hatsu (forge new skills), and en (auto-routing).",
+      "description": "Nen agent skills: performance, refactoring, launch, reverse engineering, reliability, orchestration, hatsu (forge new skills), en (auto-routing), and vow (pre-commitments).",
       "author": { "name": "rlaope", "url": "https://github.com/rlaope" },
       "homepage": "https://github.com/rlaope/nen",
       "license": "MIT",

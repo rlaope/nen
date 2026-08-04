@@ -54,6 +54,12 @@ Turning it on:
 
 Turning it off: say `nen off` (resume with `nen on`) — the protocol requires the agent to acknowledge both transitions.
 
+### The oath that binds it
+
+制約と誓約 — Restriction and Pledge: an ability grows stronger through what its user swears not to do, and a broken oath forfeits the power itself. That law ships as a skill, [vow](skills/vow/) (`/nen:vow`) — pre-commitment engineering. Before the work starts, the agent declares falsifiable vows right under the En engagement line: discipline pledges distilled from the engaged skills' own **Done means** ("no fix claimed without the failing case red then green") and scope pledges bounding the blast radius ("diff stays inside `src/billing/`", "no new dependencies"). Every vow is audited before any done claim, with evidence a third party can check; a vow broken without open renegotiation voids the claim.
+
+For an agent the law is literal, not thematic: constraints declared before the first action bind every action after it — the same constraints recalled at review time only grade the damage.
+
 <br>
 
 ## Teach your agent Nen

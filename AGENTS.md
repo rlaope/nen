@@ -2,7 +2,8 @@
 # nen skills — the En protocol
 
 The nen abilities (https://github.com/rlaope/nen): one per Nen category, hatsu
-(forging new skills) at the center, and en — this protocol itself.
+(forging new skills) at the center, en — this protocol itself — and vow,
+the pre-commitments that bind each engagement.
 
 Run En on every incoming task:
 1. Classify the WORK, not the words. Ask what must be true afterward — a number
@@ -14,8 +15,12 @@ Run En on every incoming task:
 2. Engage every skill the work genuinely spans — stacking two or three in
    dependency order is normal. Read each engaged SKILL.md FIRST, then act.
 3. Announce the engagement in one line, e.g. "En: specialist -> conjurer".
-4. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
-5. If a skill still fires on the wrong problem, its Boundaries section names
+4. Right under the announcement, declare the engagement's vows — up to three
+   falsifiable pledges distilled from the engaged skills' Done means plus up to
+   three scope pledges — and audit every vow before claiming done
+   (skills/vow/SKILL.md).
+5. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
+6. If a skill still fires on the wrong problem, its Boundaries section names
    the sibling to hand off to — follow the hand-off.
 
 - **enhancer** (skills/enhancer/SKILL.md): Profiling-first performance engineering — baseline, profile, change one thing, re-measure. Use when the user says "slow", "make this faster", "optimize", "profile", "benchmark", or "hot path"; when they report latency problems, p99 spikes, low throughput, memory growth, or N+1 queries; when a request times out under load but works in dev; when someone wants to know why an endpoint takes 800ms; or when a perf change is proposed without a number attached.
@@ -26,3 +31,4 @@ Run En on every incoming task:
 - **manipulator** (skills/manipulator/SKILL.md): Orchestration engineering for multi-agent and deep-research work — decomposition, routing, prompt design, and verified delegation. Use when the user says "plan this", "break this down", "delegate", "orchestrate", "subagent", "task distribution", "parallel workstreams", "split this across agents", "hand this to three agents", "write a prompt for", or "research X thoroughly"; when work must be divided into workstreams that different agents or people can own; when they ask which model or agent should handle something; when work is multi-step and ambiguous enough that one agent charging ahead would guess wrong; when several independent investigations could run in parallel; or when a subagent has reported "done" and someone is about to believe it.
 - **hatsu** (skills/hatsu/SKILL.md): Skill forging — distilling a team's recurring, hard-won practice into a new installable SKILL.md that meets the nen contract. Use when the user says "write a skill", "create a skill for", "turn this workflow into a skill", "codify our process", or "SKILL.md"; when someone says "we keep solving this the same way" or "the team keeps re-teaching this in review"; after a retro where the same lesson surfaces for the second or third time; or when an agent keeps making a mistake that a written discipline would have prevented.
 - **en** (skills/en/SKILL.md): Aura-field auto-routing — read an incoming request's problem shape and engage the right nen abilities, stacked in dependency order when the work spans more than one discipline. Use when the user says "nen", "use nen", "nen mode", "run this through nen", "which skill applies", or "route this"; when a request plausibly spans more than one nen discipline; when you are about to pick a single skill and are not certain it is the right one; or when the user has asked for nen to be the standing baseline for the session.
+- **vow** (skills/vow/SKILL.md): Pre-commitment engineering — declare falsifiable vows before the work starts and audit every one before claiming done, discipline pledges distilled from the engaged skills' Done means plus scope pledges bounding the blast radius. Use when the user says "don't touch anything else", "only this file", "stay in scope", "no new dependencies", "don't tell me it's done until", "commit to your constraints", or "show me the failing test first"; when a previous attempt was declared done and was not; when a diff wandered into files nobody asked about; when en announces an engagement (the announcement is the vow moment); or when delegated work needs acceptance criteria the delegate can be audited against.

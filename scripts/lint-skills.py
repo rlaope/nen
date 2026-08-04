@@ -14,7 +14,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RELEASE = "--release" in sys.argv
 
-SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator", "hatsu", "en"]
+SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator", "hatsu", "en", "vow"]
 
 # Cross-skill hand-off adjacency. Every edge is bidirectional. Each skill's
 # "## Boundaries" section must name each of its paired siblings.
@@ -24,9 +24,10 @@ PAIRS = {
     "emitter": ["manipulator", "conjurer"],
     "specialist": ["enhancer", "conjurer", "manipulator", "transmuter"],
     "conjurer": ["transmuter", "specialist", "emitter", "enhancer"],
-    "manipulator": ["emitter", "specialist", "hatsu", "en"],
-    "hatsu": ["manipulator"],
-    "en": ["manipulator"],
+    "manipulator": ["emitter", "specialist", "hatsu", "en", "vow"],
+    "hatsu": ["manipulator", "vow"],
+    "en": ["manipulator", "vow"],
+    "vow": ["en", "manipulator", "hatsu"],
 }
 
 # Required H2 sections, in contract order. Extra H2 sections are allowed;

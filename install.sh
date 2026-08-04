@@ -11,7 +11,7 @@ set -eu
 
 REPO_TARBALL="https://codeload.github.com/rlaope/nen/tar.gz/refs/heads/main"
 NEN_HOME="${NEN_HOME:-$HOME/.nen}"
-SKILLS="enhancer transmuter emitter specialist conjurer manipulator hatsu en"
+SKILLS="enhancer transmuter emitter specialist conjurer manipulator hatsu en vow"
 AGENT="auto"
 DEST=""
 
@@ -88,7 +88,8 @@ routing_block() {
 ## nen skills — the En protocol
 
 The nen abilities from https://github.com/rlaope/nen: one per Nen category,
-hatsu (forging new skills) at the center, and en — this protocol itself.
+hatsu (forging new skills) at the center, en — this protocol itself — and vow,
+the pre-commitments that bind each engagement.
 
 Run En on every incoming task:
 1. Classify the WORK, not the words. Ask what must be true afterward — a number
@@ -100,8 +101,11 @@ Run En on every incoming task:
 2. Engage every skill the work genuinely spans — stacking two or three in
    dependency order is normal. Read each engaged SKILL.md FIRST, then act.
 3. Announce the engagement in one line, e.g. "En: specialist -> conjurer".
-4. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
-5. If a skill still fires on the wrong problem, its Boundaries section names
+4. Right under the announcement, declare the engagement's vows — up to three
+   falsifiable pledges distilled from the engaged skills' Done means plus up to
+   three scope pledges — and audit every vow before claiming done.
+5. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
+6. If a skill still fires on the wrong problem, its Boundaries section names
    the sibling to hand off to — follow the hand-off.
 
 EOF

@@ -17,6 +17,8 @@ Never forge what already exists. If the recurring pain is unmeasured performance
 
 Revising an existing skill's text is editing, not forging. Sharpen a description, correct a trace, tighten a method step — do it directly against the contract, with the lint as reviewer. The forge is only for abilities that do not exist yet.
 
+A restriction and a vow share one law but not one lifetime. The restriction the forge writes into a skill is design-time and permanent — what the ability refuses to cover. The pledge an agent declares before a single task is run-time and expires with it: that is vow's territory, not a skill's text. Vow also feeds the forge — the same pledge breaking across sessions, transcripts attached, is precisely the three-occurrence evidence the Method's first step demands.
+
 ## Method
 
 1. **Prove the pattern recurs — three real occurrences, with artifacts.** Review comments, incident notes, session transcripts: collect and link them. One occurrence is an anecdote, two is a coincidence worth watching, three with artifacts is a pattern that justifies a permanent document. If you cannot produce three, file what you have and wait; the forge does not run on foresight.

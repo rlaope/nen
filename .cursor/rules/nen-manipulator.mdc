@@ -19,6 +19,8 @@ If the routing table itself comes up empty — the same need keeps recurring and
 
 If the question is only which ability should engage on the single request in front of you — sensing, not decomposing — that is en's field. En reads the problem shape and engages the right disciplines; you take over the moment the routed work must be split into units, dispatched across agents, and verified.
 
+The acceptance criteria you attach to each dispatched unit are that unit's vows, and their form is vow's discipline: falsifiable, declared before the unit starts, audited on return. Write criteria to that standard, and reject any delegate's "done" that arrives without its audit — verification cannot run on pledges nothing can check.
+
 ## Method
 
 1. **Decompose into independently verifiable units.** Each unit must have an output you can judge without running any other unit — a document with named required fields, a passing command, a table with specified columns. "Look into the auth options" is not a unit; "return the token-refresh flow for providers A and B with doc links and version numbers" is. If you cannot say what a unit's *checkable* output looks like, you have not finished decomposing.

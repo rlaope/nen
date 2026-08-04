@@ -15,7 +15,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator", "hatsu", "en"]
+SKILLS = ["enhancer", "transmuter", "emitter", "specialist", "conjurer", "manipulator", "hatsu", "en", "vow"]
 
 
 def parse(s):
@@ -32,7 +32,8 @@ def agents_md():
         "# nen skills — the En protocol",
         "",
         "The nen abilities (https://github.com/rlaope/nen): one per Nen category, hatsu",
-        "(forging new skills) at the center, and en — this protocol itself.",
+        "(forging new skills) at the center, en — this protocol itself — and vow,",
+        "the pre-commitments that bind each engagement.",
         "",
         "Run En on every incoming task:",
         "1. Classify the WORK, not the words. Ask what must be true afterward — a number",
@@ -44,8 +45,12 @@ def agents_md():
         "2. Engage every skill the work genuinely spans — stacking two or three in",
         "   dependency order is normal. Read each engaged SKILL.md FIRST, then act.",
         '3. Announce the engagement in one line, e.g. "En: specialist -> conjurer".',
-        '4. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.',
-        "5. If a skill still fires on the wrong problem, its Boundaries section names",
+        "4. Right under the announcement, declare the engagement's vows — up to three",
+        "   falsifiable pledges distilled from the engaged skills' Done means plus up to",
+        "   three scope pledges — and audit every vow before claiming done",
+        "   (skills/vow/SKILL.md).",
+        '5. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.',
+        "6. If a skill still fires on the wrong problem, its Boundaries section names",
         "   the sibling to hand off to — follow the hand-off.",
         "",
     ]
