@@ -46,6 +46,7 @@ FILES = [
     "LICENSE",
     "README.md",
     "SECURITY.md",
+    "assets/agent-x-agent.png",
     "assets/nen-hexagon.png",
     "install.sh",
     "scripts/gen-adapters.py",
