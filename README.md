@@ -68,6 +68,8 @@ Install the nen skill pack from https://github.com/rlaope/nen into this environm
 /plugin install nen@nen
 ```
 
+**Already wired in-repo.** Cloning the repo gives you working project-level setups out of the box: `AGENTS.md` for anything that reads it (Codex, OpenCode, Antigravity, Kimi, OpenClaw, ...), `.cursor/rules/` for Cursor, `.claude-plugin/` for Claude Code. Copy any of them into your own project to vendor nen. These adapters are generated from `skills/` by `scripts/gen-adapters.py` — edit the skills, never the copies.
+
 **Raw files.** The skills are plain frontmatter-plus-markdown in `skills/<name>/SKILL.md` — point any [Agent Skills](https://agentskills.io)-compatible runtime at them directly. The `.claude-plugin/` manifests and `install.sh` are additive packaging that other consumers simply ignore.
 
 ## Usage
