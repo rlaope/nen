@@ -1,0 +1,10 @@
+* text=auto eol=lf
+assets/*.png binary
+
+# keep language stats honest: this is a markdown skill pack, not a shell project
+install.sh linguist-vendored
+*.sh linguist-vendored
+
+# generated adapters — derived from skills/, collapsed in diffs and stats
+AGENTS.md linguist-generated
+.cursor/rules/*.mdc linguist-generated
