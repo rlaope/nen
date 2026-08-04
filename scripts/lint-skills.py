@@ -37,14 +37,21 @@ SECTIONS = ["Stance", "Boundaries", "Method", "Worked trace", "Anti-patterns", "
 FILES = [
     ".claude-plugin/marketplace.json",
     ".claude-plugin/plugin.json",
+    ".gitattributes",
     ".github/workflows/lint.yml",
     ".gitignore",
+    "AGENTS.md",
+    "CLAUDE.md",
     "LICENSE",
     "README.md",
+    "SECURITY.md",
     "assets/nen-hexagon.png",
     "install.sh",
+    "scripts/gen-adapters.py",
     "scripts/lint-skills.py",
-] + [f"skills/{s}/SKILL.md" for s in SKILLS]
+] + [f"skills/{s}/SKILL.md" for s in SKILLS] + [
+    f".cursor/rules/nen-{s}.mdc" for s in SKILLS
+]
 
 TRIGGER = re.compile(r"use (?:this skill )?when\b", re.I)
 # Escaped range on purpose: a literal Hangul character class would make this
