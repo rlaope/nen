@@ -42,6 +42,7 @@ FILES = [
     "LICENSE",
     "README.md",
     "assets/nen-hexagon.png",
+    "install.sh",
     "scripts/lint-skills.py",
 ] + [f"skills/{s}/SKILL.md" for s in SKILLS]
 
