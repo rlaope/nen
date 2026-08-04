@@ -6,7 +6,7 @@ Skill packs that give an AI coding agent a discipline — six abilities, one per
 
 <table>
   <tr>
-    <td width="50%"><img src="https://media1.tenor.com/m/bmcU6fpKS4YAAAAC/gon-gon-confused.gif" width="100%" alt="Gon confused"></td>
+    <td width="50%"><img src="https://media1.tenor.com/m/pLhhw8tQib0AAAAC/killua-hunter-x-hunter.gif" width="100%" alt="Killua lightning"></td>
     <td width="50%"><img src="https://media1.tenor.com/m/YiwndvrqbeIAAAAC/rampage.gif" width="100%" alt="Gon rampage"></td>
   </tr>
   <tr>
