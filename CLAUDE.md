@@ -6,7 +6,7 @@ nen ships six installable agent skills: engineering disciplines that borrow thei
 
 ## Source of truth and generated files
 
-- `skills/<name>/SKILL.md` is the single source of truth. Seven skills: enhancer, transmuter, emitter, specialist, conjurer, manipulator, and hatsu (the meta-skill that forges new ones — route "add a skill" work through it).
+- `skills/<name>/SKILL.md` is the single source of truth. The skills: enhancer, transmuter, emitter, specialist, conjurer, manipulator, hatsu (forges new skills — route "add a skill" work through it), and en (auto-routing — reads the problem shape and engages abilities).
 - `AGENTS.md` and `.cursor/rules/*.mdc` are **generated** — never edit them by hand. After changing any skill, regenerate: `python3 scripts/gen-adapters.py`
 - `install.sh` wires the skills into agent runtimes at install time. Keep it POSIX sh (no bashisms) and BSD/macOS-compatible (no GNU-only flags — BSD sed has already bitten this repo once).
 

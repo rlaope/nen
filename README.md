@@ -19,7 +19,7 @@ Skill packs that give an AI coding agent a discipline.
 
 ## What this is
 
-In *Hunter x Hunter*, every fighter's aura falls into one of six Nen categories, and mastery means knowing which category a problem belongs to. **nen** maps those six categories to six engineering disciplines and ships each one as an installable agent skill: a stance, a method, hard boundaries, and a worked trace that shows the discipline actually being applied.
+In *Hunter x Hunter*, every fighter's aura falls into one of six Nen categories, and mastery means knowing which category a problem belongs to. **nen** maps each category to an engineering discipline and ships each one as an installable agent skill: a stance, a method, hard boundaries, and a worked trace that shows the discipline actually being applied.
 
 nen ships **skills only** — no runtime, no hooks, no MCP servers. Each skill is a single portable `SKILL.md` that any agent can read: Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi CLI, Antigravity, Pi, GitHub Copilot, or anything with an `AGENTS.md`-style instructions file. One skill text, every runtime.
 
@@ -40,7 +40,19 @@ The skills know about each other. Each one's **Boundaries** section names the si
 
 ### The center of the hexagon
 
-発 — Hatsu. In the source material it is the personal expression of Nen: the ability you forge for yourself, sharpened by self-imposed restrictions. Here it is the seventh skill, [hatsu](skills/hatsu/) (`/nen:hatsu`) — the meta-discipline of forging **new** skills: prove a practice actually recurs, write its restrictions before its powers, ship it in the same six-section contract the other six follow, and trial-fire it before calling it real.
+発 — Hatsu. In the source material it is the personal expression of Nen: the ability you forge for yourself, sharpened by self-imposed restrictions. Here it is a skill of its own, [hatsu](skills/hatsu/) (`/nen:hatsu`) — the meta-discipline of forging **new** skills: prove a practice actually recurs, write its restrictions before its powers, ship it in the same six-section contract the other six follow, and trial-fire it before calling it real.
+
+### The field around it
+
+円 — En: extending your aura outward to sense everything in range. The field itself is a skill, [en](skills/en/) (`/nen:en`) — auto-routing — you stop choosing skills. The agent reads each request's underlying problem shape (**never** keywords — classifying the work properly *is* the Nen), engages every ability the work genuinely spans, stacked in dependency order, and hands recurring uncovered needs to hatsu for forging. Every engagement is announced in one auditable line: `En: specialist → conjurer — name the mechanism, then close its failure modes`.
+
+Turning it on:
+
+- **Claude Code** — invoke `/nen:en` once; it runs as the session baseline from then on.
+- **AGENTS.md-family runtimes** (Codex, OpenCode, Gemini CLI, Qwen Code, Kimi, Antigravity, ...) — the installed routing block *is* the En protocol; it is on by default after install.
+- **Cursor** — the `nen-en` rule engages when a request spans disciplines, or pin it with "run everything through nen".
+
+Turning it off: say `nen off` (resume with `nen on`) — the protocol requires the agent to acknowledge both transitions.
 
 <br>
 
@@ -48,15 +60,15 @@ The skills know about each other. Each one's **Boundaries** section names the si
 
 <p align="center"><img src="assets/agent-x-agent.png" width="480" alt="Agent x Agent"></p>
 
-The prompt below teaches your agent the Nen abilities. Whatever you run — Claude Code, Codex, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi, Antigravity, Pi — paste it in, and the agent learns the seven skills by installing them the way its own runtime expects:
+The prompt below teaches your agent the Nen abilities. Whatever you run — Claude Code, Codex, Cursor, OpenCode, Gemini CLI, Qwen Code, Kimi, Antigravity, Pi — paste it in, and the agent learns the skills by installing them the way its own runtime expects:
 
 ```text
 Teach yourself the nen skill pack from https://github.com/rlaope/nen.
 
 1. Fetch the repo: git clone --depth 1 https://github.com/rlaope/nen.git /tmp/nen
    (or download and extract https://codeload.github.com/rlaope/nen/tar.gz/refs/heads/main).
-2. Copy the seven skill files to ~/.nen/skills/<name>/SKILL.md
-   (enhancer, transmuter, emitter, specialist, conjurer, manipulator, hatsu).
+2. Copy every skill directory from the repo's skills/ folder to
+   ~/.nen/skills/<name>/SKILL.md.
 3. Wire them into YOUR runtime, whichever you are:
    - Claude Code: copy the whole repo to ~/.claude/skills/nen instead — it loads
      as a namespaced plugin (/nen:<skill>).
@@ -69,7 +81,7 @@ Teach yourself the nen skill pack from https://github.com/rlaope/nen.
      "when a task matches a description, read that SKILL.md first and follow
      its Method before acting."
 4. Do not edit the SKILL.md files themselves.
-5. Verify: list the seven skills you installed and where each one landed.
+5. Verify: list the skills you installed and where each one landed.
 ```
 
 ### More ways
