@@ -85,7 +85,7 @@ Rework dispatch to R2, scoped to the failure: "Sections 2 and 3 do not meet crit
 
 - The decomposition and per-unit acceptance criteria visible in the transcript *before* the first dispatch, not reconstructed after.
 - Parallel units dispatched in one batch — the log shows concurrent starts, and serial ordering exists only where a real data dependency is named.
-- A routing decision per unit (model and context), stated, not defaulted.
+- A routing decision per unit (model and context), stated, not defaulted — and the degenerate case is not exempt: a single-unit dispatch still names its model and context choice explicitly.
 - Every return checked criterion-by-criterion, with the check visible: pass/fail per criterion, artifacts opened or commands run.
 - Failed returns answered with scoped rework dispatches quoting the unmet criteria — zero silent acceptances, zero orchestrator patch-overs.
 - A synthesis in which every claim traces to a verified unit artifact; anything unverified is flagged as such, not blended in.
