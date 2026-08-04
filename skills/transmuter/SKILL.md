@@ -1,6 +1,6 @@
 ---
 name: transmuter
-description: Behavior-preserving refactoring under characterization tests, plus severity-rated code review. Use when the user says "refactor", "clean up", "tech debt", "code review", "extract", "rename", "restructure", or "this file is a mess"; when code is called hard to change, scary to touch, or too tangled to test; when requirements shifted and the current shape fights the new feature; when a PR needs review for structure and maintainability; or when every small change keeps ballooning because everything touches everything.
+description: Behavior-preserving refactoring under characterization tests, plus severity-rated code review. Use when the user says "refactor", "clean up", "tech debt", "code review", "extract", "rename", "restructure", "this file is a mess", or "impossible to modify"; when every small change breaks something unrelated; when cleanup has to land before the next feature has anywhere to go; when code is called hard to change, scary to touch, or too tangled to test; when requirements shifted and the current shape fights the new feature; when a PR needs review for structure and maintainability; or when every small change keeps ballooning because everything touches everything.
 ---
 
 ## Stance
