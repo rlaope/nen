@@ -1,6 +1,6 @@
 # nen
 
-Skill packs that give an AI coding agent a discipline — six abilities, one per Nen category, and a seventh at the center.
+Skill packs that give an AI coding agent a discipline.
 
 ![The six Nen categories](assets/nen-hexagon.png)
 
