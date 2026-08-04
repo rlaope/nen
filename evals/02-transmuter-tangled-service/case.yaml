@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: 02-transmuter-tangled-service
+runs: 2
+max_turns: 20
+timeout_seconds: 600
+allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
+model: sonnet
+plugins: ["../.."]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: |
+    src/orders_service.py is impossible to modify — every small change breaks
+    something unrelated, and the only test we have is a mock that proves nothing.
+    Clean it up so we can add the new "enterprise" plan type next sprint.

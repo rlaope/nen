@@ -19,6 +19,10 @@ CLAUDE_CODE_WALNUT_SPIRE=1 claude plugin eval .
 # one case, one run (cheap smoke test)
 CLAUDE_CODE_WALNUT_SPIRE=1 claude plugin eval . --case "06-*" --runs 1
 
+# scaffolded cases (02, 05): --scaffold seeds their dummy repos, and the
+# operator grant unlocks the gated tools the runner needs for executed proof
+CLAUDE_CODE_WALNUT_SPIRE=1 claude plugin eval . --case "02-*" --runs 1 --scaffold --allow-tools Bash Write Edit
+
 # measure uplift: run every case twice, with the plugin and without,
 # and report the score delta (the headline number is the with-minus-without delta)
 CLAUDE_CODE_WALNUT_SPIRE=1 claude plugin eval . --ablation with-without
@@ -35,11 +39,28 @@ Results are written to `evals/results/<timestamp>/` (gitignored — do not commi
 
 ## How it works
 
-Each case is a directory: `prompt.md` (frontmatter: `runs`, `max_turns`,
+Most cases are a directory with `prompt.md` (frontmatter: `runs`, `max_turns`,
 `timeout_seconds`, `allowed_tools`, `model`; body: the user prompt) plus
 `graders/*.md` (frontmatter `type: llm | regex | tool_used | file_exists | ...`).
-Cases run in an empty sandbox cwd with an isolated home, so prompts contain no
-project files; rubrics accept either a substantive discipline-conformant answer or
+Cases run in a sandbox cwd with an isolated home.
+
+Cases `02` and `05` use the YAML case form instead (`case.yaml` with
+`schema_version: "1.0"` and `execution.prompt`) because only that form supports
+scaffolding: `context.scaffold_script` names a script file relative to the case
+dir (`scaffold.sh`, committed and reviewable) that seeds a small dummy repo — a
+tangled service file guarded by a mock-theater test, and an idempotency-free
+webhook handler beside provider docs stating at-least-once delivery. Two flags
+gate the full path, by design: `--scaffold` runs the seed script (author-supplied
+bash, executed as you — only pass it on case files you trust), and
+`--allow-tools Bash Write Edit` is the operator grant for the gated tools the
+runner needs to produce executed red-then-green proof; a case requesting them in
+`allowed_tools` is not enough on its own. In the YAML form `plugins` entries are
+paths relative to the case dir, so both cases pin `plugins: ["../.."]` to load
+the repo's own plugin. Without the flags those two cases degrade honestly: the
+skill still fires and diagnoses from the seeded files, but the discipline grader
+fails the run for claiming no proof it could not produce.
+
+The remaining rubrics accept either a substantive discipline-conformant answer or
 a discipline-conformant request for the missing artifact — but always fail
 wrong-discipline framing.
 
