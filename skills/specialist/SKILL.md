@@ -29,11 +29,13 @@ If the investigation is actually a research program — five systems to compare,
 
 4. **Design a differential experiment that isolates ONE variable and splits the candidates.** Before running it, write down what each candidate predicts. An experiment whose outcome every candidate predicts equally teaches nothing; an experiment that varies two things at once attributes its result to neither. One variable, divergent predictions, predictions on paper first.
 
-5. **Run, kill candidates, repeat until one survives.** Each run should execute a written prediction against observed numbers. When observation matches no candidate, that is the good outcome — your model was wrong in an informative way; return to step 2 with better questions.
+5. **Run, kill candidates, repeat until one survives.** Each run should execute a written prediction against observed numbers. When observation matches no candidate, that is the good outcome — your model was wrong in an informative way; return to step 2 with better questions. A pre-registration alone is not a deliverable: a plan where every number is still labeled *expected* has produced nothing yet — Done means is met only after runs replace expected with measured.
 
-6. **Name the mechanism precisely, with parameters.** "Client-side token bucket, capacity 40, refill 100/min" — not "some kind of throttling." The test of a name: it must reproduce the original symptom numerically. If the named mechanism can't predict the numbers that started the investigation, you haven't finished naming it.
+6. **Name the mechanism precisely, with parameters.** "Client-side token bucket, capacity 40, refill 100/min" — not "some kind of throttling." The test of a name: it must reproduce the original symptom numerically. If the named mechanism can't predict the numbers that started the investigation, you haven't finished naming it. And in every write-up, label each number and citation as *measured* or *expected* — a bound interpolated between measured points stays *inferred* until the boundary run exists — because a projected file:line or an illustrative latency presented bare reads as collected evidence, which is exactly the guess in a lab coat this discipline exists to kill.
 
 7. **Only then decide.** Work with the mechanism, around it, or replace it — and verify the decision's own prediction against reality. A decision made before the mechanism is named is a guess; the same decision made after is engineering.
+
+Comparison mode — "which implementation should we adopt" — is the same method with the symptom replaced by a decision. The docs pass (step 1) runs per candidate: each library's documented claims join the same to-be-checked list, and the contradiction list is kept per candidate. The candidates (step 3) are the implementations themselves. In place of reproducing an original symptom (step 6), pre-register the decision rule before any experiment runs — the measurable differences that would pick A over B — and close by showing each candidate's observed behavior against its own documented claims. A comparison with no pre-registered rule degrades into picking the one you liked first.
 
 ## Worked trace
 
