@@ -25,11 +25,13 @@ If you catch yourself writing "just run this" about a demo path you have not ver
 
 4. **Format for the specific channel, from scratch.** Hacker News wants a plain declarative title and a first-person top comment with the backstory; a changelog wants what changed and what the reader must do about it; a thread wants one idea per post with the strongest first. These are different documents that happen to share facts. Rewrite for each; pasting is visible and readers punish it.
 
-5. **Back every claim with a number or a demo, and delete what you can't back.** Every superlative gets a measurement in the same sentence or gets cut. And the piece must contain a try-it path that goes from reading to running in under a minute — no signup, no build step, no API key. If the fastest honest demo takes five minutes, ship a bundled sample that takes thirty seconds and say so.
+5. **Back every claim with a number or a demo, and delete what you can't back.** Every superlative gets a measurement in the same sentence or gets cut. This applies at draft time, not publish time: a number with no artifact behind it yet does not enter the draft with a verify-later note — produce the artifact as part of the writing, or cut the number. "Verify before publish" is deferred fabrication. And the piece must contain a try-it path that goes from reading to running in under a minute — no signup, no build step, no API key. If the fastest honest demo takes five minutes, ship a bundled sample that takes thirty seconds and say so.
 
-6. **Rehearse the landing cold.** On a machine without your dev environment, copy-paste the exact demo line from the draft and time it. The one command in the post is the one command a thousand people will run verbatim; a typo there costs more than a typo anywhere else in the project.
+6. **Rehearse the landing cold.** On a machine without your dev environment, copy-paste every command the copy instructs the reader to run — verbatim, not a variant — and time each one. The commands in the post are the commands a thousand people will run exactly as written; a typo there costs more than a typo anywhere else in the project.
 
 7. **Publish, then hold the thread with the same evidence standard.** The first hour tells you which claim readers attack and which they repeat. Answer objections with the number or the demo, not with adjectives — the comments are part of the copy now.
+
+Maintenance channels — release notes, changelogs, migration guides — are not launches, and they do not carry the full launch kit. What survives unchanged: name the reader and what they must do (step 1, where before→after becomes upgrade→outcome), channel-native formatting (step 4), the evidence rule (step 5), and a cold rehearsal of any command the copy tells the reader to run (step 6). What is waived: competing angles (steps 2–3) and objection thread-holding (step 7). Say which mode you are in — a changelog dressed as a launch post is as broken as the reverse.
 
 ## Worked trace
 
@@ -98,8 +100,8 @@ real    0m38.2s
 ## Done means
 
 - The before→after sentence written down, naming a specific reader mid-task — the sentence the whole piece is a delivery vehicle for.
-- Three drafted angles on record, one chosen with a stated reason, two visibly cut (and at most salvaged as a paragraph of support).
+- Three drafted angles on record, one chosen with a stated reason, two visibly cut (and at most salvaged as a paragraph of support). *Launch pieces only — waived for maintenance channels, and the output says which mode it ran in.*
 - Final copy per channel, each formatted to that channel's norms; no two channels share paragraphs.
 - Every quantitative claim in the copy traceable to a command output, log, or benchmark artifact that exists.
 - A demo path timed under 60 seconds on a machine without the dev environment, transcript kept.
-- The piece published — or ready, with the top three predictable objections listed and an evidence-backed answer prepared for each. Copy that never ships is aura that never left the body.
+- The piece published — or ready, with the top three predictable objections listed and an evidence-backed answer prepared for each, every answer cross-checked against the artifacts already in the piece so no reply contradicts the copy it defends. Copy that never ships is aura that never left the body.
