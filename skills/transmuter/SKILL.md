@@ -19,7 +19,7 @@ If you cannot state what the legacy code actually does — the mechanism is opaq
 
 ## Method
 
-1. **Pin current behavior with characterization tests before touching structure.** Capture what the code does, not what it should do — including the branch everyone agrees is weird. If you find a bug, assert the buggy output and mark it with a comment and a ticket; fixing it now silently converts the refactor into a behavior change. Recorded production inputs beat invented fixtures: the goal is a net under the real thing.
+1. **Pin current behavior with characterization tests before touching structure.** Capture what the code does, not what it should do — including the branch everyone agrees is weird. If you find a bug, assert the buggy output and mark it with a comment and a ticket; fixing it now silently converts the refactor into a behavior change. Recorded production inputs beat invented fixtures: the goal is a net under the real thing. State the net's edge explicitly — which dependencies the characterization run stubs, freezes, or hits live; an unstated boundary is where the net silently has a hole. And if the existing suite is mock-theater, characterize from recorded inputs anyway, then triage the old tests before retiring them: a mock test can still encode a real contract (a required external call, an ordering) that input→output comparison cannot see.
 
 2. **Plan the route as a chain of green states.** Each step must compile and pass on its own. If you cannot see the next green state from where you stand, the step is too big — split it until you can. A refactor is not one leap; it is a walk where both feet never leave the ground at once.
 
@@ -29,9 +29,9 @@ If you cannot state what the legacy code actually does — the mechanism is opaq
 
 5. **When behavior must change, stop refactoring.** A real bug surfaced, a requirement shifted — fine. Land the structural commits you have, ship the behavior change as its own commit with its own test and a deliberate update to the characterization case, then resume. The refactor lane and the behavior lane never merge.
 
-6. **Close by re-running the characterization suite and settling its fate.** Same inputs, byte-identical outputs — that is the definition of done for the transformation. Then promote the tests that document real contracts and delete the pure scaffolding, in its own commit, with the reason in the message.
+6. **Close by re-running the characterization suite and settling its fate.** Same inputs, byte-identical outputs — that is the definition of done for the transformation. Where outputs carry legitimate nondeterminism (timestamps, generated ids, float formatting), normalize both sides with a committed scrubber and compare the normalized golden masters; the normalization rules are part of the suite, never an ad-hoc excuse. Then promote the tests that document real contracts and delete the pure scaffolding, in its own commit, with the reason in the message.
 
-7. **For review, rate every finding: blocker, major, minor, or nit — with the reason the severity applies.** "Blocker: this couples the parser to the session, which makes the #4142 extraction impossible" — not a bare "blocker". Every finding carries a suggested fix or it is a complaint, not a review. Nits are batched at the end and marked explicitly non-blocking, so the author knows what actually gates the merge.
+7. **For review, rate every finding: blocker, major, minor, or nit — with the reason the severity applies.** "Blocker: this couples the parser to the session, which makes the #4142 extraction impossible" — not a bare "blocker". Calibrate the middle of the scale: major is correctness or design damage that must change before merge without invalidating the approach; minor should change but needn't block. If every finding lands on blocker or nit, the scale isn't being used. Every finding carries a suggested fix or it is a complaint, not a review. Nits are batched at the end and marked explicitly non-blocking, so the author knows what actually gates the merge.
 
 ## Worked trace
 
