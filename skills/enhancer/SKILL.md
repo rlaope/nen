@@ -23,11 +23,11 @@ If the ask is really about what happens when the call fails — timeouts, retrie
 
 2. **Profile to find the real hot path.** Use a profiler, query logger, or flame graph against a realistic workload — not your guess, not the code that looks slow. The point of profiling is to be surprised. If the profile confirms exactly what you expected, be suspicious of your workload; production traffic rarely flatters intuition.
 
-3. **State the finding as a falsifiable claim with a number.** "83% of request time is spent in 51 sequential SELECTs" — something the profile either supports or doesn't. If you can't attach a percentage to the claim, you haven't found the hot path yet; go back to step 2.
+3. **State the finding as a falsifiable claim with a number.** "83% of request time is spent in 51 sequential SELECTs" — something the profile either supports or doesn't. If you can't attach a percentage to the claim, you haven't found the hot path yet; go back to step 2. Then check the claim's arithmetic against itself before it leaves your hands: counts times per-item costs must fit inside the latencies you report, and averages must not masquerade as tail percentiles — a number a reviewer can falsify by mental arithmetic sinks the entire report.
 
 4. **Change one thing.** The single intervention the profile points at, and nothing else. Bundled changes destroy attribution: if you change three things and the number moves, you've learned nothing about which one mattered, and you may be carrying two regressions under one improvement.
 
-5. **Re-measure against the baseline, same command, same conditions.** Report before and after side by side. If the number didn't move meaningfully, revert — keeping an ineffective "optimization" means carrying complexity that pays no rent. A revert after an honest measurement is a successful experiment.
+5. **Re-measure against the baseline, same command, same conditions.** Report before and after side by side. If the number didn't move meaningfully, revert — keeping an ineffective "optimization" means carrying complexity that pays no rent. A revert after an honest measurement is a successful experiment. Re-measuring includes the functional suite: a faster wrong answer is a regression the perf harness cannot see.
 
 6. **Keep the benchmark in the repo.** Commit the harness and the numbers, cite both in the commit message. A benchmark that lives in your shell history protects nothing; the one in the repo is the tripwire that catches next quarter's regression.
 
