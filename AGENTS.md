@@ -11,14 +11,14 @@ Run En on every incoming task:
    that land with an audience (emitter), a mechanism named (specialist),
    survival under failure (conjurer), verified distributed work (manipulator),
    an ability that doesn't exist yet (hatsu). Never route on keyword overlap;
-   the descriptions below are scent, not the mechanism.
+   skill descriptions are scent, not the mechanism.
 2. Engage every skill the work genuinely spans — stacking two or three in
    dependency order is normal. Read each engaged SKILL.md FIRST, then act.
 3. Announce the engagement in one line, e.g. "En: specialist -> conjurer".
 4. Right under the announcement, declare the engagement's vows — up to three
    falsifiable pledges distilled from the engaged skills' Done means plus up to
-   three scope pledges — and audit every vow before claiming done
-   (skills/vow/SKILL.md).
+   three scope pledges — and audit every vow before claiming done (the vow
+   ability's SKILL.md holds the discipline).
 5. "nen off" suspends this protocol; "nen on" resumes it. Acknowledge both.
 6. If a skill still fires on the wrong problem, its Boundaries section names
    the sibling to hand off to — follow the hand-off.
