@@ -1,6 +1,6 @@
 {
   "name": "nen",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Installable agent skills mapped to the Nen system: performance, refactoring, launch, reverse engineering, reliability, orchestration, hatsu (forge new skills), en — auto-routing that reads the problem shape and engages the right abilities — and vow, pre-commitments declared before work and audited before done.",
   "author": { "name": "rlaope", "url": "https://github.com/rlaope" },
   "homepage": "https://github.com/rlaope/nen",

@@ -31,6 +31,7 @@ CI runs the first two on every push; a red check on main is a stop-everything ev
 
 - Commits are authored as `rlaope <105429536+rlaope@users.noreply.github.com>` via repo-local git config. Do **not** add AI co-author trailers to commit messages.
 - Conventional commits (`feat(scope):`, `fix(scope):`, `docs:`, `chore:`), one purpose per commit, split rather than bundled.
+- Releases: one `chore(release): vX.Y.Z` commit bumps `.claude-plugin/plugin.json`, both version fields in `.claude-plugin/marketplace.json`, and `install.sh`'s `NEN_REF` default to the new tag; tag that commit `vX.Y.Z` and push the tag with the branch — the installer's supply-chain pin resolves against it.
 
 ## IP note
 

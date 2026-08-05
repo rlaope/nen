@@ -9,7 +9,8 @@
 # thin layer on top, so every runtime reads the same skill text.
 set -eu
 
-NEN_REF="${NEN_REF:-main}"
+# default pinned to the latest release tag; every chore(release) commit bumps it
+NEN_REF="${NEN_REF:-v0.4.0}"
 case "$NEN_REF" in
   *[!A-Za-z0-9._/-]*|"") echo "nen: NEN_REF must be a plain branch or tag name" >&2; exit 1 ;;
 esac
